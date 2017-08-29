@@ -16,7 +16,7 @@ MRV_STR_LEN = 255
 
 
 class MRVNetwork(model_base.BASEV2):
-
+    """ Table of networks """
     __tablename__ = "mrv_ml2_networks"
 
     network_id = sa.Column(sa.String(MRV_UUID_LEN), primary_key=True)
@@ -27,7 +27,7 @@ class MRVNetwork(model_base.BASEV2):
 
 
 class MRVPort(model_base.BASEV2):
-
+    """ Table of ports """
     __tablename__ = "mrv_ml2_ports"
 
     port_id = sa.Column(sa.String(MRV_UUID_LEN), primary_key=True)

@@ -20,6 +20,7 @@ LOG = logger.getLogger(__name__)
 
 
 class MRVSyncWorker(worker.NeutronWorker):
+    """ Worker sych process """
 
     def __init__(self, switches):
         super(MRVSyncWorker, self).__init__(worker_process_count=0)
@@ -51,8 +52,6 @@ class MRVSyncWorker(worker.NeutronWorker):
 
 
     def _do_sync(self):
-        LOG.info('ILJA - synch started')
-        
         nets = { n.network_id: n for n in db.get_networks() }
         ports = { p.port_id: p for p in db.get_ports() }
 
@@ -66,6 +65,5 @@ class MRVSyncWorker(worker.NeutronWorker):
                 sw.add_port(port, net)
 
         self.stop()
-        LOG.info('ILJA - synch finished')
 
 

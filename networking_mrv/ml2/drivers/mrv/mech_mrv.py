@@ -22,6 +22,7 @@ PP = pprint.PrettyPrinter()
 
 
 class MrvMechanismDriver(api.MechanismDriver):
+    """ ML2 mechanism driver for MRV switch equipment """
 
     def initialize(self):
         self._cfg_dict = config.get_config()

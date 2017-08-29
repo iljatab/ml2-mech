@@ -12,6 +12,7 @@ LOG = logger.getLogger(__name__)
 
 
 def add_network(network_id, vlan_id, physical_network, name):
+    """ Store a network unless it already exists """
     session = db.get_session()
     with session.begin():
         network = (session.query(models.MRVNetwork)
@@ -31,6 +32,7 @@ def add_network(network_id, vlan_id, physical_network, name):
 
 
 def get_network(network_id):
+    """ Get network by Neutron network_id """
     session = db.get_session()
     with session.begin():
         network = (session.query(models.MRVNetwork)
@@ -40,6 +42,7 @@ def get_network(network_id):
 
 
 def del_network(network_id):
+    """ Delete network by Neutron network_id """
     session = db.get_session()
     with session.begin():
         network = (session.query(models.MRVNetwork)
@@ -53,6 +56,7 @@ def del_network(network_id):
 
 
 def add_port(port_id, network_id, host):
+    """ Store a port unless it already exists """
     session = db.get_session()
     with session.begin():
         port = (session.query(models.MRVPort)
@@ -69,6 +73,7 @@ def add_port(port_id, network_id, host):
 
 
 def del_port(port_id):
+    """ Delete port by Neutron port_id """
     session = db.get_session()
     with session.begin():
         port = (session.query(models.MRVPort)
@@ -82,6 +87,7 @@ def del_port(port_id):
 
 
 def get_networks():
+    """ Get all networks """
     session = db.get_session()
     with session.begin():
         networks = session.query(models.MRVNetwork).all()
@@ -89,6 +95,7 @@ def get_networks():
 
 
 def get_ports():
+    """ Get all ports """
     session = db.get_session()
     with session.begin():
         ports = session.query(models.MRVPort).all()

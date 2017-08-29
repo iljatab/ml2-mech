@@ -20,6 +20,7 @@ PP = pprint.PrettyPrinter()
 
 
 class MrvSwitchConnector(object):
+    """ Program MRV switch equipment using Netconf API """
 
     def __init__(self, switch_id, switch_cfg):
         self._id = switch_id

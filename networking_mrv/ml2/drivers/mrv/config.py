@@ -9,6 +9,7 @@ LOG = logger.getLogger(__name__)
 
 
 def get_config():
+    """ Returns configuration dictionary from [ml2_mech_mrv:*] groups """
     conf_dict = {}
     for sw_id, sw_cfg in _read_config_file().items():
         conf_dict[sw_id] = {}
