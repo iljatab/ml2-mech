@@ -245,10 +245,10 @@ class MrvSwitchConnector(object):
                              timeout=5) as m:
                 for req in requests:
                     LOG.info('ILJA\n%s', req)
+                    m.discard_changes()
                     m.edit_config(target='candidate', config=req, test_option='set')
                     m.commit()
 
         except NCClientError as e:
             LOG.warning("Netconf error for switch {}: {}".format(self._id, e))
-            # TODO m.discard_changes() ?
 
