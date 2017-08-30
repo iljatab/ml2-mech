@@ -111,7 +111,7 @@ class MrvSwitchConnector(object):
 
 
     def _ac_name(self, port, network):
-        return self._links[port.host]
+        return self._links[port.host] + '.' + str(network.vlan_id)
 
 
     def _ac_outer_tag(self, port, network):
@@ -236,17 +236,17 @@ class MrvSwitchConnector(object):
 
     def _talk_to_switch(self, requests):
         try:
-            #with ncm.connect(host=self._host,
-            #                 username=self._username,
-            #                 password=self._password,
-            #                 hostkey_verify=False,
-            #                 allow_agent=False,
-            #                 look_for_keys=False,
-            #                 timeout=5) as m:
+            with ncm.connect(host=self._host,
+                             username=self._username,
+                             password=self._password,
+                             hostkey_verify=False,
+                             allow_agent=False,
+                             look_for_keys=False,
+                             timeout=5) as m:
                 for req in requests:
                     LOG.info('ILJA\n%s', req)
-                    #m.edit_config(target='candidate', config=req, test_option='set')
-                    #m.commit()
+                    m.edit_config(target='candidate', config=req, test_option='set')
+                    m.commit()
 
         except NCClientError as e:
             LOG.warning("Netconf error for switch {}: {}".format(self._id, e))
