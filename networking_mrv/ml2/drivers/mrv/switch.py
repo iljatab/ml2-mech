@@ -68,12 +68,12 @@ class MrvSwitchConnector(object):
         if not self._is_my_network(network):
             return
         reqs = self._add_network_xml(network)
-        self._talk_to_switch(reqs)
+        return self._talk_to_switch(reqs)
 
 
     def del_network(self, network):
         reqs = self._del_network_xml(network)
-        self._talk_to_switch(reqs)
+        return self._talk_to_switch(reqs)
 
 
     def add_port(self, port, network):
@@ -82,7 +82,7 @@ class MrvSwitchConnector(object):
         if port.host not in self._links:
             return
         reqs = self._add_port_xml(port, network)
-        self._talk_to_switch(reqs)
+        return self._talk_to_switch(reqs)
 
 
     def del_port(self, port, network):
@@ -91,7 +91,7 @@ class MrvSwitchConnector(object):
         if port.host not in self._links:
             return
         reqs = self._del_port_xml(port, network)
-        self._talk_to_switch(reqs)
+        return self._talk_to_switch(reqs)
 
 
     def _is_my_network(self, network):
@@ -251,4 +251,7 @@ class MrvSwitchConnector(object):
 
         except NCClientError as e:
             LOG.warning("Netconf error for switch {}: {}".format(self._id, e))
+            return False
+
+        return True
 
