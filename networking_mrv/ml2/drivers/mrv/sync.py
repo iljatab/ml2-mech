@@ -9,6 +9,8 @@ import copy
 import inspect
 import pprint
 
+from ncclient import NCClientError
+
 from oslo_log import log as logger
 from oslo_service import loopingcall
 
@@ -32,7 +34,7 @@ class MRVSyncWorker(worker.NeutronWorker):
         super(MRVSyncWorker, self).start()
         if self._loop is None:
             self._loop = loopingcall.FixedIntervalLoopingCall(self._do_sync)
-        self._loop.start(interval=15)
+        self._loop.start(interval=35)
 
 
     def stop(self, graceful=False):
@@ -52,18 +54,28 @@ class MRVSyncWorker(worker.NeutronWorker):
 
 
     def _do_sync(self):
+        LOG.info('Sync started')
         nets = { n.network_id: n for n in db.get_networks() }
         ports = { p.port_id: p for p in db.get_ports() }
 
-        for net in nets.values():
-            for sw in self._switches.values():
-                sw.add_network(net)
+        try:
+            for net in nets.values():
+                for sw in self._switches.values():
+                    e = sw.add_network(net)
+                    if e is not None:
+                        raise e
 
-        for port in ports.values():
-            net = nets.get(port.network_id)
-            for sw in self._switches.values():
-                sw.add_port(port, net)
+            for port in ports.values():
+                net = nets.get(port.network_id)
+                for sw in self._switches.values():
+                    e = sw.add_port(port, net)
+                    if e is not None:
+                        raise e
 
-        self.stop()
+        except NCClientError:
+            LOG.warning('Sync failed')
+        else:
+            LOG.info('Sync completed')
+            self.stop()
 
 

@@ -251,7 +251,7 @@ class MrvSwitchConnector(object):
 
         except NCClientError as e:
             LOG.warning("Netconf error for switch {}: {}".format(self._id, e))
-            return False
+            return e
 
-        return True
+        return None
 
